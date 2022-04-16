@@ -6,6 +6,8 @@ const {
   pausa,
   leerInput,
   listaTareasToDelate,
+  confirmDelate,
+  checkList,
 } = require('./helpers/inquirer');
 
 const Tareas = require('./models/tareas');
@@ -50,14 +52,21 @@ const main = async () => {
         break;
 
       case '5':
+        const ids = await checkList(tareas.listadoArr); //devuelve los IDs de las tareas que seteo como completadas.
+        tareas.toggle(ids);
         break;
 
       case '6':
         const id = await listaTareasToDelate(tareas.listadoArr);
-        tareas.borrarTarea(id);
+        if (id !== '0') {
+          const confirm = await confirmDelate();
+          confirm && tareas.borrarTarea(id);
+          console.log('Tarea eliminada'.red);
+        }
+        break;
     }
 
-    //guarda la tarea en la DB con un formato determinado
+    //una vez que pasan todos los switch async  y la DB fue modificada.se guarda lista en la DB con un formato determinado
     guardarArchivo(tareas.listadoArr);
 
     await pausa();

@@ -90,6 +90,11 @@ const listaTareasToDelate = async (tareas = []) => {
     };
   });
 
+  choices.unshift({
+    value: '0',
+    name: `${'0.'.red} Salir`,
+  });
+
   const preguntas = [
     {
       type: 'list',
@@ -104,9 +109,56 @@ const listaTareasToDelate = async (tareas = []) => {
   return id;
 };
 
+const confirmDelate = async () => {
+  const { confirm } = await inquirer.prompt([
+    {
+      type: 'confirm',
+      name: 'confirm',
+      message: 'Seleccione una opcion',
+      choices: [
+        {
+          value: '1',
+          name: `${'1.'.green} Eliminar Tarea`,
+        },
+        {
+          value: '0',
+          name: `${'0.'.red} Salir`,
+        },
+      ],
+    },
+  ]);
+
+  return confirm;
+};
+
+const checkList = async (tareas = []) => {
+  const choices = tareas.map((tarea, index) => {
+    return {
+      value: tarea.id,
+      name: `${index + 1}. ${tarea.description}`,
+      checked: tarea.completedE ? true : false,
+    };
+  });
+
+  const pregunta = [
+    {
+      type: 'checkbox',
+      name: 'ids',
+      message: 'Seleccione las tareas que desea completar',
+      choices,
+    },
+  ];
+
+  const { ids } = await inquirer.prompt(pregunta);
+
+  return ids;
+};
+
 module.exports = {
   inquirerMenu,
   pausa,
   leerInput,
   listaTareasToDelate,
+  confirmDelate,
+  checkList,
 };
