@@ -82,8 +82,31 @@ const leerInput = async (mensaje) => {
   return desc;
 };
 
+const listaTareasToDelate = async (tareas = []) => {
+  const choices = tareas.map((tarea, index) => {
+    return {
+      value: tarea.id,
+      name: `${index + 1}. ${tarea.description}`,
+    };
+  });
+
+  const preguntas = [
+    {
+      type: 'list',
+      name: 'id',
+      message: 'Seleccione una opcion a borrar',
+      choices,
+    },
+  ];
+
+  const { id } = await inquirer.prompt(preguntas);
+
+  return id;
+};
+
 module.exports = {
   inquirerMenu,
   pausa,
   leerInput,
+  listaTareasToDelate,
 };
