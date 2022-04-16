@@ -60,8 +60,9 @@ const main = async () => {
         const id = await listaTareasToDelate(tareas.listadoArr);
         if (id !== '0') {
           const confirm = await confirmDelate();
-          confirm && tareas.borrarTarea(id);
-          console.log('Tarea eliminada'.red);
+          confirm &&
+            tareas.borrarTarea(id) &&
+            console.log('Tarea eliminada'.red);
         }
         break;
     }
